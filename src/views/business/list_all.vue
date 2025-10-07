@@ -43,6 +43,7 @@
 			<el-table-column label="商户编号" prop="id" :show-overflow-tooltip="true" fixed="left" width="100" />
 			<el-table-column label="商户密钥" prop="secret_key" width="350" />
 			<el-table-column label="登录账号" prop="username" :show-overflow-tooltip="true" />
+			<el-table-column label="转账方式" prop="card_type_str" :show-overflow-tooltip="true" />
 			<el-table-column label="名称" prop="realname" :show-overflow-tooltip="true" />
 			<el-table-column label="订单费率" prop="order_rate" :show-overflow-tooltip="true" />
 			<el-table-column label="固定费用" prop="commission" :show-overflow-tooltip="true" />
@@ -79,7 +80,26 @@
 						<el-input v-model="form.realname" maxlength="20" show-word-limit autocomplete="off">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="工作室">
+					<el-form-item label="转账方式">
+						<el-radio-group v-model="form.card_type">
+							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="三方选择" v-show="form.card_type==2">
+						<el-select v-model="form.channel_id">
+							<el-option v-for="item in optionChannelBusiness" :key="item.id" :label="item.name" :value="item.id" />
+						</el-select>
+					</el-form-item>
+					<!-- <el-form-item label="商户ID" v-show="form.card_type==2">
+						<el-input-number v-model="form.account" :controls="false" />
+					</el-form-item>
+					<el-form-item label="APPID" v-show="form.card_type==2">
+						<el-input-number v-model="form.account_appid" :controls="false" />
+					</el-form-item>
+					<el-form-item label="密钥" v-show="form.card_type==2">
+						<el-input	 v-model="form.secret_key" :controls="false" />
+					</el-form-item> -->
+					<el-form-item label="工作室" v-show="form.card_type==1">
 						<el-checkbox-group v-model="form.card_business_ids">
 							<el-checkbox v-for="item in optionCardBusiness" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
 						</el-checkbox-group>
@@ -211,6 +231,7 @@ export default {
 			form: {},
 
 			optionCardBusiness: [],
+			optionChannelBusiness: [],
 
 			// 表单校验
 			rules: {
@@ -239,6 +260,9 @@ export default {
 		modelStatus() {
 			return this.$store.getters.modelStatus
 		},
+		modelStatus4() {
+			return this.$store.getters.modelStatus4
+		},
 		verifyStatus() {
 			return this.$store.getters.verifyStatus
 		},
@@ -246,8 +270,10 @@ export default {
 	created() {
 		this.getList();
 		this.getOptionCardBusiness();
+		this.getOptionChannelBusiness();
 	},
 	methods: {
+		
 		indexMethod(index) {
 			return index + this.queryParams.limit * (this.queryParams.page - 1) + 1
 		},
@@ -320,6 +346,7 @@ export default {
 
 			// 重新加载卡商
 			this.getOptionCardBusiness();
+			this.getOptionChannelBusiness();
 
 			that.reset();
 			that.request({
@@ -542,6 +569,16 @@ export default {
 				data: {},
 			}).then(res => {
 				that.optionCardBusiness = res.data
+			});
+		},
+		getOptionChannelBusiness() {
+			let that = this;
+
+			that.request({
+				url: "option/channel",
+				data: {},
+			}).then(res => {
+				that.optionChannelBusiness = res.data
 			});
 		},
 	}

@@ -20,6 +20,10 @@ const user = {
       { value: -1, label: '未处理' },
       { value: 1, label: '已处理' },
     ],
+    modelStatus4:[
+      { value: 1, label: '人工转账' },
+      { value: 2, label: '三方转账' },
+    ],
     verifyStatus:[
       { value: -1, label: '待认证' },
       { value: 1, label: '已认证' },

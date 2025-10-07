@@ -19,6 +19,7 @@ const getters = {
   modelStatus: state => state.user.modelStatus,
   modelStatus2: state => state.user.modelStatus2,
   modelStatus3: state => state.user.modelStatus3,
+  modelStatus4: state => state.user.modelStatus4,
   channelType: state => state.user.channelType,
   rmbType: state => state.user.rmbType,
   alipayPType: state => state.user.alipayPType,
