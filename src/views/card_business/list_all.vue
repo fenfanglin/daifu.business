@@ -123,9 +123,13 @@
 					<el-form-item label="APPID" v-show="form.card_type==2">
 						<el-input-number v-model="form.account_appid" :controls="false" />
 					</el-form-item>
+					<el-form-item label="密钥ID" v-show="form.card_type==2 && form.channel_id==2">
+						<el-input	 v-model="form.secret_key_id" :controls="false" />
+					</el-form-item>
 					<el-form-item label="密钥" v-show="form.card_type==2">
 						<el-input	 v-model="form.secret_key" :controls="false" />
 					</el-form-item>
+					
 					
 					<el-form-item label="JQK系统">
 						<div v-if="is_binding_jqk">
@@ -279,6 +283,8 @@ export default {
 				data: {}
 			}).then(res => {
 				that.optionCardBusiness = res.data
+				console.log('that.optionCardBusiness',that.optionCardBusiness);
+				
 			})
 		},
 		indexMethod(index) {
