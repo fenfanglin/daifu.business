@@ -118,10 +118,10 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="商户ID" v-show="form.card_type==2">
-						<el-input-number v-model="form.account" :controls="false" />
+						<el-input v-model="form.account" :controls="false" />
 					</el-form-item>
 					<el-form-item label="APPID" v-show="form.card_type==2">
-						<el-input-number v-model="form.account_appid" :controls="false" />
+						<el-input v-model="form.account_appid" :controls="false" />
 					</el-form-item>
 					<el-form-item label="密钥ID" v-show="form.card_type==2 && form.channel_id==2">
 						<el-input	 v-model="form.secret_key_id" :controls="false" />
