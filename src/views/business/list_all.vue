@@ -43,8 +43,9 @@
 			<el-table-column label="商户编号" prop="id" :show-overflow-tooltip="true" fixed="left" width="100" />
 			<el-table-column label="商户密钥" prop="secret_key" width="350" />
 			<el-table-column label="登录账号" prop="username" :show-overflow-tooltip="true" />
-			<el-table-column label="转账方式" prop="card_type_str" :show-overflow-tooltip="true" />
 			<el-table-column label="名称" prop="realname" :show-overflow-tooltip="true" />
+			<el-table-column label="转账方式" prop="card_type_str" :show-overflow-tooltip="true" />
+			<el-table-column label="单笔控制" prop="amount_range" :show-overflow-tooltip="true" />
 			<el-table-column label="订单费率" prop="order_rate" :show-overflow-tooltip="true" />
 			<el-table-column label="固定费用" prop="commission" :show-overflow-tooltip="true" />
 			<el-table-column label="余额" prop="allow_withdraw" :show-overflow-tooltip="true" />
@@ -82,7 +83,7 @@
 					</el-form-item>
 					<el-form-item label="转账方式">
 						<el-radio-group v-model="form.card_type" @change="zhuanzhang">
-							<el-radio v-for="item in modelStatus4" :label="item.value" >{{item.label}}</el-radio>
+							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="工作室" v-show="form.card_type==2">
@@ -90,9 +91,9 @@
 							<el-option v-for="item in optionCardBusiness2" :key="item.index" :label="item.name" :value="item.id" />
 						</el-select>
 					</el-form-item>
-					
+
 					<el-form-item label="工作室" v-show="form.card_type==1">
-						<el-checkbox-group v-model="form.card_business_ids" >
+						<el-checkbox-group v-model="form.card_business_ids">
 							<el-checkbox v-for="item in optionCardBusiness1" :key="item.index" :label="item.id" :value="item.id">{{item.name}}</el-checkbox>
 						</el-checkbox-group>
 					</el-form-item>
@@ -103,6 +104,10 @@
 					<el-form-item label="固定费用">
 						<el-input-number v-model="form.commission" :controls="false" />
 						<p style="color: red; margin-top: 0px; margin-bottom: 0px">注：每笔订单固定扣除费用</p>
+					</el-form-item>
+					<el-form-item label="单笔控制">
+						<el-input-number v-model="form.min_amount" :controls="false" class="w210px text-left" />
+						<el-input-number v-model="form.max_amount" :controls="false" class="w210px text-left ml10" />
 					</el-form-item>
 					<!-- <el-form-item label="电话">
 						<el-input v-model="form.phone" maxlength="11" show-word-limit autocomplete="off">
@@ -267,7 +272,7 @@ export default {
 		// this.getOptionChannelBusiness();
 	},
 	methods: {
-		
+
 		indexMethod(index) {
 			return index + this.queryParams.limit * (this.queryParams.page - 1) + 1
 		},
@@ -296,6 +301,8 @@ export default {
 		reset() {
 			this.form = {
 				card_business_ids: [],
+				min_amount: 0,
+				max_amount: 999999,
 			}
 
 			this.formPassword = {}
@@ -335,38 +342,38 @@ export default {
 			this.form.status = 1;
 		},
 		/** 编辑按钮操作 */
-		 handleEdit(row) {
+		handleEdit(row) {
 			let that = this
 			that.reset();
 			that.open = true;
-			
+
 			// that.getOptionCardBusiness();
 			// 重新加载卡商
 			that.getOptionChannelBusiness();
 
-			that.$nextTick(async()=>{
+			that.$nextTick(async () => {
 				await that.request({
-				url: "business/view",
-				data: {
-					no: row.no,
-				},
-			}).then(res => {
-				that.form = res.data;
-				if (that.form.card_type=='2') {
-					if (that.form.card_business_ids.includes(',')) {
-						that.form.card_business_ids = ''
-					}else{
-					that.form.card_business_ids = Number(that.form.card_business_ids)
-					}
-				}else if (that.form.card_type=='1') {
-					
-					that.form.card_business_ids = that.form.card_business_ids
-					
-					// that.form.card_business_ids = that.form.card_business_ids.split(",")
-				}
+					url: "business/view",
+					data: {
+						no: row.no,
+					},
+				}).then(res => {
+					that.form = res.data;
+					if (that.form.card_type == '2') {
+						if (that.form.card_business_ids.includes(',')) {
+							that.form.card_business_ids = ''
+						} else {
+							that.form.card_business_ids = Number(that.form.card_business_ids)
+						}
+					} else if (that.form.card_type == '1') {
 
-				that.title = "编辑";
-			});
+						that.form.card_business_ids = that.form.card_business_ids
+
+						// that.form.card_business_ids = that.form.card_business_ids.split(",")
+					}
+
+					that.title = "编辑";
+				});
 			})
 		},
 		handleEditPassword(row) {
@@ -572,33 +579,33 @@ export default {
 		},
 		zhuanzhang(value) {
 			let that = this;
-			console.log('value',value);
-			
-			if (value==1) {
-				that.form.card_business_ids=[]
-			}else if (value==2) {
-				that.form.card_business_ids=''
+			console.log('value', value);
+
+			if (value == 1) {
+				that.form.card_business_ids = []
+			} else if (value == 2) {
+				that.form.card_business_ids = ''
 			}
 		},
 		async getOptionCardBusiness() {
 			let that = this;
-			that.optionCardBusiness1=[]
-			that.optionCardBusiness2=[]
+			that.optionCardBusiness1 = []
+			that.optionCardBusiness2 = []
 			// that.$nextTick(()=>{
-				await that.request({
+			await that.request({
 				url: "option/card_business",
 				data: {},
 			}).then(res => {
 				that.optionCardBusiness = res.data
 				for (let i = 0; i < that.optionCardBusiness.length; i++) {
-					if (that.optionCardBusiness[i].card_type=='1') {
+					if (that.optionCardBusiness[i].card_type == '1') {
 						that.optionCardBusiness1.push(that.optionCardBusiness[i])
-					}else{
+					} else {
 						that.optionCardBusiness2.push(that.optionCardBusiness[i])
 					}
-					
+
 				}
-				
+
 			});
 			// })
 		},

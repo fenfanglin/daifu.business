@@ -87,6 +87,7 @@
 						<el-input-number v-model="form.commission" :controls="false" />
 						<p style="color: red; margin-top: 0px; margin-bottom: 0px">注：每笔订单固定扣除费用</p>
 					</el-form-item>
+
 					<!-- <el-form-item label="电话">
 						<el-input v-model="form.phone" maxlength="11" show-word-limit autocomplete="off">
 						</el-input>
@@ -124,13 +125,12 @@
 						<el-input v-model="form.account_appid" :controls="false" />
 					</el-form-item>
 					<el-form-item label="密钥ID" v-show="form.card_type==2 && form.channel_id==2">
-						<el-input	 v-model="form.secret_key_id" :controls="false" />
+						<el-input v-model="form.secret_key_id" :controls="false" />
 					</el-form-item>
 					<el-form-item label="密钥" v-show="form.card_type==2">
-						<el-input	 v-model="form.secret_key" :controls="false" />
+						<el-input v-model="form.secret_key" :controls="false" />
 					</el-form-item>
-					
-					
+
 					<el-form-item label="JQK系统">
 						<div v-if="is_binding_jqk">
 							<el-input v-model="jqk_business_id" class="w200px" disabled />
@@ -283,8 +283,8 @@ export default {
 				data: {}
 			}).then(res => {
 				that.optionCardBusiness = res.data
-				console.log('that.optionCardBusiness',that.optionCardBusiness);
-				
+				console.log('that.optionCardBusiness', that.optionCardBusiness);
+
 			})
 		},
 		indexMethod(index) {
