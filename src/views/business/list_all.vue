@@ -301,8 +301,8 @@ export default {
 		reset() {
 			this.form = {
 				card_business_ids: [],
-				min_amount: 0,
-				max_amount: 999999,
+				min_amount: 0.01,
+				max_amount: 999999.99,
 			}
 
 			this.formPassword = {}
