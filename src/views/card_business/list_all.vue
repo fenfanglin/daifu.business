@@ -100,6 +100,9 @@
 					<el-form-item label="登录ip白名单">
 						<el-input type="textarea" v-model="form.login_ip" :rows="5" />
 					</el-form-item>
+					<el-form-item label="接口ip白名单">
+						<el-input type="textarea" v-model="form.api_ip" :rows="5" />
+					</el-form-item>
 					<!-- <el-form-item label="谷歌密钥">
 						<el-input v-model="form.google_secret_key" maxlength="32" show-word-limit />
 					</el-form-item> -->
@@ -130,7 +133,6 @@
 					<el-form-item label="密钥" v-show="form.card_type==2">
 						<el-input v-model="form.secret_key" :controls="false" />
 					</el-form-item>
-
 					<el-form-item label="JQK系统">
 						<div v-if="is_binding_jqk">
 							<el-input v-model="jqk_business_id" class="w200px" disabled />
