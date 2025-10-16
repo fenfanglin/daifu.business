@@ -100,9 +100,6 @@
 					<el-form-item label="登录ip白名单">
 						<el-input type="textarea" v-model="form.login_ip" :rows="5" />
 					</el-form-item>
-					<el-form-item label="接口ip白名单">
-						<el-input type="textarea" v-model="form.api_ip" :rows="5" />
-					</el-form-item>
 					<!-- <el-form-item label="谷歌密钥">
 						<el-input v-model="form.google_secret_key" maxlength="32" show-word-limit />
 					</el-form-item> -->
