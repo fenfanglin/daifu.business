@@ -86,15 +86,14 @@
 							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="工作室" v-show="form.card_type==2">
-						<el-select v-model="form.card_business_ids" @change="$forceUpdate();">
-							<el-option v-for="item in optionCardBusiness2" :key="item.index" :label="item.name" :value="item.id" />
-						</el-select>
-					</el-form-item>
-
-					<el-form-item label="工作室" v-show="form.card_type==1">
+					<el-form-item label="工作室" v-if="form.card_type == 1">
 						<el-checkbox-group v-model="form.card_business_ids">
-							<el-checkbox v-for="item in optionCardBusiness1" :key="item.index" :label="item.id" :value="item.id">{{item.name}}</el-checkbox>
+							<el-checkbox v-for="item in optionCardBusiness1" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+						</el-checkbox-group>
+					</el-form-item>
+					<el-form-item label="工作室" v-if="form.card_type == 2">
+						<el-checkbox-group v-model="form.card_business_ids">
+							<el-checkbox v-for="item in optionCardBusiness2" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
 						</el-checkbox-group>
 					</el-form-item>
 					<el-form-item label="订单费率">
@@ -362,18 +361,6 @@ export default {
 					},
 				}).then(res => {
 					that.form = res.data;
-					if (that.form.card_type == '2') {
-						if (that.form.card_business_ids.includes(',')) {
-							that.form.card_business_ids = ''
-						} else {
-							that.form.card_business_ids = Number(that.form.card_business_ids)
-						}
-					} else if (that.form.card_type == '1') {
-
-						that.form.card_business_ids = that.form.card_business_ids
-
-						// that.form.card_business_ids = that.form.card_business_ids.split(",")
-					}
 
 					that.title = "编辑";
 				});
@@ -580,37 +567,63 @@ export default {
 
 			});
 		},
-		zhuanzhang(value) {
-			let that = this;
-			console.log('value', value);
+		// zhuanzhang(value) {
+		// 	let that = this;
+		// 	console.log('value', value);
 
-			if (value == 1) {
-				that.form.card_business_ids = []
-			} else if (value == 2) {
-				that.form.card_business_ids = ''
-			}
+		// 	if (value == 1) {
+		// 		that.form.card_business_ids = []
+		// 	} else if (value == 2) {
+		// 		that.form.card_business_ids = ''
+		// 	}
+		// },
+		// async getOptionCardBusiness() {
+		// 	let that = this;
+		// 	that.optionCardBusiness1 = []
+		// 	that.optionCardBusiness2 = []
+		// 	// that.$nextTick(()=>{
+		// 	await that.request({
+		// 		url: "option/card_business",
+		// 		data: {},
+		// 	}).then(res => {
+		// 		that.optionCardBusiness = res.data
+		// 		for (let i = 0; i < that.optionCardBusiness.length; i++) {
+		// 			if (that.optionCardBusiness[i].card_type == '1') {
+		// 				that.optionCardBusiness1.push(that.optionCardBusiness[i])
+		// 			} else {
+		// 				that.optionCardBusiness2.push(that.optionCardBusiness[i])
+		// 			}
+
+		// 		}
+
+		// 	});
+		// 	// })
+		// },
+		zhuanzhang() {
+			let that = this;
+
+			that.form.card_business_ids = []
 		},
 		async getOptionCardBusiness() {
 			let that = this;
-			that.optionCardBusiness1 = []
-			that.optionCardBusiness2 = []
-			// that.$nextTick(()=>{
-			await that.request({
-				url: "option/card_business",
-				data: {},
-			}).then(res => {
-				that.optionCardBusiness = res.data
-				for (let i = 0; i < that.optionCardBusiness.length; i++) {
-					if (that.optionCardBusiness[i].card_type == '1') {
-						that.optionCardBusiness1.push(that.optionCardBusiness[i])
-					} else {
-						that.optionCardBusiness2.push(that.optionCardBusiness[i])
-					}
 
+			that.request({
+				url: 'option/card_business',
+				data: {
+					card_type: 1,
 				}
+			}).then(res => {
+				that.optionCardBusiness1 = res.data
+			})
 
-			});
-			// })
+			that.request({
+				url: 'option/card_business',
+				data: {
+					card_type: 2,
+				}
+			}).then(res => {
+				that.optionCardBusiness2 = res.data
+			})
 		},
 		getOptionChannelBusiness() {
 			let that = this;

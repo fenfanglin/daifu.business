@@ -113,23 +113,6 @@
 							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="三方选择" v-show="form.card_type==2">
-						<el-select v-model="form.channel_id">
-							<el-option v-for="item in optionCardBusiness" :key="item.id" :label="item.name" :value="item.id" />
-						</el-select>
-					</el-form-item>
-					<el-form-item label="商户ID" v-show="form.card_type==2">
-						<el-input v-model="form.account" :controls="false" />
-					</el-form-item>
-					<el-form-item label="APPID" v-show="form.card_type==2">
-						<el-input v-model="form.account_appid" :controls="false" />
-					</el-form-item>
-					<el-form-item label="密钥ID" v-show="form.card_type==2 && form.channel_id==2">
-						<el-input v-model="form.secret_key_id" :controls="false" />
-					</el-form-item>
-					<el-form-item label="密钥" v-show="form.card_type==2">
-						<el-input v-model="form.secret_key" :controls="false" />
-					</el-form-item>
 					<el-form-item label="JQK系统">
 						<div v-if="is_binding_jqk">
 							<el-input v-model="jqk_business_id" class="w200px" disabled />
