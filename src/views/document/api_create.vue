@@ -2,6 +2,10 @@
 	<div class="app-container">
 		<div class="wiki-preview-body markdown-body">
 			<h2>统一下单</h2>
+			<h4 class="text-danger">银行卡注意：</h4>
+			<p class="pl-4 text-danger">
+				1、请参考银行卡名称 <a href="https://opendocs.alipay.com/open/021njv" target="_blank" class="text-primary">https://opendocs.alipay.com/open/021njv</a><br />
+			</p>
 			<h4>接口链接：</h4>
 			<div class="markdown-code-block">
 				<pre><code>{接口域名}/order/create</code></pre>
@@ -28,36 +32,36 @@ Content-Type：application/json</code></pre>
 						<td align="center">numeric</td>
 						<td>商户编号</td>
 					</tr>
-          <tr>
-            <td>account_type</td>
-            <td align="center">是</td>
-            <td align="center">numeric</td>
-            <td>账号类型 1：银行卡，2：usdt， 3：支付宝</td>
-          </tr>
-          <tr>
-            <td>bank</td>
-            <td align="center">视类型而定</td>
-            <td align="center">string</td>
-            <td>银行名称（当账号类型为银行卡时必填，其余不传）</td>
-          </tr>
-          <tr>
-            <td>branch</td>
-            <td align="center">视类型而定</td>
-            <td align="center">string</td>
-            <td>银行支行（当账号类型为银行卡时必填，其余不传）</td>
-          </tr>
-          <tr>
-            <td>account_name</td>
-            <td align="center">视类型而定</td>
-            <td align="center">string</td>
-            <td>收款账号姓名（当账号类型为银行卡和支付宝时必填，其余不传）</td>
-          </tr>
-          <tr>
-            <td>account</td>
-            <td align="center">是</td>
-            <td align="center">string</td>
-            <td>当账号类型为银行卡时填银行卡号，当账号类型为usdt时填钱包地址，当账号类型为支付宝时填支付宝账号</td>
-          </tr>
+					<tr>
+						<td>account_type</td>
+						<td align="center">是</td>
+						<td align="center">numeric</td>
+						<td>账号类型 1：银行卡，2：usdt， 3：支付宝</td>
+					</tr>
+					<tr>
+						<td>bank</td>
+						<td align="center">否</td>
+						<td align="center">string</td>
+						<td>银行名称（当账号类型为银行卡时必填，其余不传）</td>
+					</tr>
+					<tr>
+						<td>branch</td>
+						<td align="center">否</td>
+						<td align="center">string</td>
+						<td>银行支行（当账号类型为银行卡时必填，其余不传）</td>
+					</tr>
+					<tr>
+						<td>account_name</td>
+						<td align="center">否</td>
+						<td align="center">string</td>
+						<td>收款账号姓名（当账号类型为银行卡和支付宝时必填，其余不传）</td>
+					</tr>
+					<tr>
+						<td>account</td>
+						<td align="center">是</td>
+						<td align="center">string</td>
+						<td>当账号类型为银行卡时填银行卡号，当账号类型为usdt时填钱包地址，当账号类型为支付宝时填支付宝账号</td>
+					</tr>
 					<tr>
 						<td>out_trade_no</td>
 						<td align="center">是</td>
@@ -212,5 +216,4 @@ export default {
 };
 </script>
 <style lang="scss">
-
 </style>

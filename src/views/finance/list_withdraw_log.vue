@@ -7,20 +7,13 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item class="mr10">
-				<el-input v-model="queryParams.money" placeholder="发生金额" clearable/>
+				<el-input v-model="queryParams.money" placeholder="发生金额" clearable />
 			</el-form-item>
 			<el-form-item class="mr10">
-				<el-input v-model="queryParams.keyword" placeholder="备注" clearable/>
+				<el-input v-model="queryParams.keyword" placeholder="备注" clearable />
 			</el-form-item>
 			<el-form-item class="mr10">
-				<el-date-picker
-					v-model="queryParams.create_time"
-					type="datetimerange"
-					range-separator="至"
-					start-placeholder="时间开始"
-					end-placeholder="时间结束"
-					:default-time="['00:00:00', '23:59:59']"
-				/>
+				<el-date-picker v-model="queryParams.create_time" type="datetimerange" range-separator="至" start-placeholder="时间开始" end-placeholder="时间结束" :default-time="['00:00:00', '23:59:59']" />
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" icon="el-icon-search" size="medium" @click="handleQuery">搜索</el-button>
@@ -28,6 +21,14 @@
 				<el-button icon="el-icon-refresh" size="medium" @click="resetQuery">重置</el-button>
 			</el-form-item>
 		</el-form>
+		<el-row class="mt10 mb20">
+			<el-col :span="1.5" class="total-info">
+				<span>
+					总费用：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{info.total_fee}}</el-tag>
+					订单笔数：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{info.total_order}}单</el-tag>
+				</span>
+			</el-col>
+		</el-row>
 
 		<el-table ref="multipleTable" v-loading="loading" border empty-text="没有相关数据" :data="list">
 			<el-table-column label="商户id" prop="sub_business_id" fixed="left" min-width="15%" />
@@ -45,13 +46,7 @@
 			<el-table-column label="备注" prop="remark" width="400" />
 		</el-table>
 
-		<pagination
-			v-show="total>0"
-			:total="total"
-			:page.sync="queryParams.page"
-			:limit.sync="queryParams.limit"
-			@pagination="getList"
-		/>
+		<pagination v-show="total>0" :total="total" :page.sync="queryParams.page" :limit.sync="queryParams.limit" @pagination="getList" />
 
 	</div>
 </template>
@@ -70,6 +65,7 @@ export default {
 			total: 0,
 			// 表格数据
 			list: [],
+			info: [],
 
 			// 查询参数
 			queryParams: {
@@ -106,6 +102,7 @@ export default {
 				data: that.queryParams,
 			}).then(res => {
 				that.list = res.data.list;
+				that.info = res.data.info;
 				that.total = res.data.total;
 				that.loading = false;
 			});

@@ -44,6 +44,8 @@
 			<el-table-column label="商户密钥" prop="secret_key" width="350" />
 			<el-table-column label="登录账号" prop="username" :show-overflow-tooltip="true" />
 			<el-table-column label="名称" prop="realname" :show-overflow-tooltip="true" />
+			<el-table-column label="转账方式" prop="card_type_str" :show-overflow-tooltip="true" />
+			<el-table-column label="单笔控制" prop="amount_range" :show-overflow-tooltip="true" />
 			<el-table-column label="订单费率" prop="order_rate" :show-overflow-tooltip="true" />
 			<el-table-column label="固定费用" prop="commission" :show-overflow-tooltip="true" />
 			<el-table-column label="余额" prop="allow_withdraw" :show-overflow-tooltip="true" />
@@ -79,9 +81,19 @@
 						<el-input v-model="form.realname" maxlength="20" show-word-limit autocomplete="off">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="工作室">
+					<el-form-item label="转账方式">
+						<el-radio-group v-model="form.card_type" @change="zhuanzhang">
+							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="工作室" v-if="form.card_type == 1">
 						<el-checkbox-group v-model="form.card_business_ids">
-							<el-checkbox v-for="item in optionCardBusiness" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+							<el-checkbox v-for="item in optionCardBusiness1" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+						</el-checkbox-group>
+					</el-form-item>
+					<el-form-item label="工作室" v-if="form.card_type == 2">
+						<el-checkbox-group v-model="form.card_business_ids">
+							<el-checkbox v-for="item in optionCardBusiness2" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
 						</el-checkbox-group>
 					</el-form-item>
 					<el-form-item label="订单费率">
@@ -91,6 +103,10 @@
 					<el-form-item label="固定费用">
 						<el-input-number v-model="form.commission" :controls="false" />
 						<p style="color: red; margin-top: 0px; margin-bottom: 0px">注：每笔订单固定扣除费用</p>
+					</el-form-item>
+					<el-form-item label="单笔控制">
+						<el-input-number v-model="form.min_amount" :controls="false" class="w210px text-left" />
+						<el-input-number v-model="form.max_amount" :controls="false" class="w210px text-left ml10" />
 					</el-form-item>
 					<!-- <el-form-item label="电话">
 						<el-input v-model="form.phone" maxlength="11" show-word-limit autocomplete="off">
@@ -103,6 +119,9 @@
 					</el-form-item> -->
 					<el-form-item label="登录ip白名单">
 						<el-input type="textarea" v-model="form.login_ip" :rows="5" />
+					</el-form-item>
+					<el-form-item label="接口ip白名单">
+						<el-input type="textarea" v-model="form.api_ip" :rows="5" />
 					</el-form-item>
 					<!-- <el-form-item label="谷歌密钥">
 						<el-input v-model="form.google_secret_key" maxlength="32" show-word-limit />
@@ -211,6 +230,9 @@ export default {
 			form: {},
 
 			optionCardBusiness: [],
+			optionCardBusiness1: [],
+			optionCardBusiness2: [],
+			optionChannelBusiness: [],
 
 			// 表单校验
 			rules: {
@@ -239,6 +261,9 @@ export default {
 		modelStatus() {
 			return this.$store.getters.modelStatus
 		},
+		modelStatus4() {
+			return this.$store.getters.modelStatus4
+		},
 		verifyStatus() {
 			return this.$store.getters.verifyStatus
 		},
@@ -246,8 +271,10 @@ export default {
 	created() {
 		this.getList();
 		this.getOptionCardBusiness();
+		// this.getOptionChannelBusiness();
 	},
 	methods: {
+
 		indexMethod(index) {
 			return index + this.queryParams.limit * (this.queryParams.page - 1) + 1
 		},
@@ -276,6 +303,8 @@ export default {
 		reset() {
 			this.form = {
 				card_business_ids: [],
+				min_amount: 0.01,
+				max_amount: 999999.99,
 			}
 
 			this.formPassword = {}
@@ -317,21 +346,25 @@ export default {
 		/** 编辑按钮操作 */
 		handleEdit(row) {
 			let that = this
-
-			// 重新加载卡商
-			this.getOptionCardBusiness();
-
 			that.reset();
-			that.request({
-				url: "business/view",
-				data: {
-					no: row.no,
-				},
-			}).then(res => {
-				that.form = res.data;
-				that.open = true;
-				that.title = "编辑";
-			});
+			that.open = true;
+
+			// that.getOptionCardBusiness();
+			// 重新加载卡商
+			that.getOptionChannelBusiness();
+
+			that.$nextTick(async () => {
+				await that.request({
+					url: "business/view",
+					data: {
+						no: row.no,
+					},
+				}).then(res => {
+					that.form = res.data;
+
+					that.title = "编辑";
+				});
+			})
 		},
 		handleEditPassword(row) {
 			let that = this
@@ -534,14 +567,72 @@ export default {
 
 			});
 		},
-		getOptionCardBusiness() {
+		// zhuanzhang(value) {
+		// 	let that = this;
+		// 	console.log('value', value);
+
+		// 	if (value == 1) {
+		// 		that.form.card_business_ids = []
+		// 	} else if (value == 2) {
+		// 		that.form.card_business_ids = ''
+		// 	}
+		// },
+		// async getOptionCardBusiness() {
+		// 	let that = this;
+		// 	that.optionCardBusiness1 = []
+		// 	that.optionCardBusiness2 = []
+		// 	// that.$nextTick(()=>{
+		// 	await that.request({
+		// 		url: "option/card_business",
+		// 		data: {},
+		// 	}).then(res => {
+		// 		that.optionCardBusiness = res.data
+		// 		for (let i = 0; i < that.optionCardBusiness.length; i++) {
+		// 			if (that.optionCardBusiness[i].card_type == '1') {
+		// 				that.optionCardBusiness1.push(that.optionCardBusiness[i])
+		// 			} else {
+		// 				that.optionCardBusiness2.push(that.optionCardBusiness[i])
+		// 			}
+
+		// 		}
+
+		// 	});
+		// 	// })
+		// },
+		zhuanzhang() {
+			let that = this;
+
+			that.form.card_business_ids = []
+		},
+		async getOptionCardBusiness() {
 			let that = this;
 
 			that.request({
-				url: "option/card_business",
+				url: 'option/card_business',
+				data: {
+					card_type: 1,
+				}
+			}).then(res => {
+				that.optionCardBusiness1 = res.data
+			})
+
+			that.request({
+				url: 'option/card_business',
+				data: {
+					card_type: 2,
+				}
+			}).then(res => {
+				that.optionCardBusiness2 = res.data
+			})
+		},
+		getOptionChannelBusiness() {
+			let that = this;
+
+			that.request({
+				url: "option/channel",
 				data: {},
 			}).then(res => {
-				that.optionCardBusiness = res.data
+				that.optionChannelBusiness = res.data
 			});
 		},
 	}

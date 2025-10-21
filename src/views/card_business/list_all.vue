@@ -43,6 +43,7 @@
 			<el-table-column label="工作室ID" prop="id" :show-overflow-tooltip="true" fixed="left" width="120" />
 			<el-table-column label="工作室账号" prop="username" :show-overflow-tooltip="true" />
 			<el-table-column label="工作室名称" prop="realname" :show-overflow-tooltip="true" />
+			<el-table-column label="转账方式" prop="card_type_str" :show-overflow-tooltip="true" />
 			<el-table-column label="订单费率" prop="order_rate" :show-overflow-tooltip="true" />
 			<el-table-column label="固定费用" prop="commission" :show-overflow-tooltip="true" />
 			<el-table-column label="可提现金额" prop="allow_withdraw" :show-overflow-tooltip="true" />
@@ -86,6 +87,7 @@
 						<el-input-number v-model="form.commission" :controls="false" />
 						<p style="color: red; margin-top: 0px; margin-bottom: 0px">注：每笔订单固定扣除费用</p>
 					</el-form-item>
+
 					<!-- <el-form-item label="电话">
 						<el-input v-model="form.phone" maxlength="11" show-word-limit autocomplete="off">
 						</el-input>
@@ -104,6 +106,11 @@
 					<el-form-item label="状态">
 						<el-radio-group v-model="form.status">
 							<el-radio v-for="item in modelStatus" :label="item.value">{{item.label}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="转账方式">
+						<el-radio-group v-model="form.card_type">
+							<el-radio v-for="item in modelStatus4" :label="item.value">{{item.label}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item label="JQK系统">
@@ -194,7 +201,7 @@ export default {
 			open: false,
 			openPassword: false,
 			openWithdraw: false,
-
+			optionCardBusiness: [],
 			withdraw_type: 1,
 
 			// 查询参数
@@ -238,14 +245,30 @@ export default {
 		modelStatus() {
 			return this.$store.getters.modelStatus
 		},
+		modelStatus4() {
+			return this.$store.getters.modelStatus4
+		},
 		verifyStatus() {
 			return this.$store.getters.verifyStatus
 		},
 	},
 	created() {
 		this.getList();
+		this.getOptionCardBusiness()
 	},
 	methods: {
+		getOptionCardBusiness() {
+			let that = this
+
+			that.request({
+				url: 'option/channel',
+				data: {}
+			}).then(res => {
+				that.optionCardBusiness = res.data
+				console.log('that.optionCardBusiness', that.optionCardBusiness);
+
+			})
+		},
 		indexMethod(index) {
 			return index + this.queryParams.limit * (this.queryParams.page - 1) + 1
 		},
@@ -312,8 +335,8 @@ export default {
 		},
 		/** 编辑按钮操作 */
 		handleEdit(row) {
+			this.getOptionCardBusiness()
 			let that = this
-
 			that.reset();
 			that.request({
 				url: "card_business/view",

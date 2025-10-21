@@ -15,7 +15,6 @@ const getters = {
 	topbarRouters: state => state.permission.topbarRouters,
 	defaultRoutes: state => state.permission.defaultRoutes,
 	sidebarRouters: state => state.permission.sidebarRouters,
-
 	modelStatus: state => state.user.modelStatus,
 	modelStatus2: state => state.user.modelStatus2,
 	modelStatus3: state => state.user.modelStatus3,
