@@ -103,7 +103,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="24" :sm="12" :lg="6" class="card-panel-col">
+			<el-col v-if="user.type == 3" :xs="24" :sm="12" :lg="6" class="card-panel-col">
 				<div class="card-panel">
 					<div class="card-panel-description">
 						<div class="card-panel-num">{{data.info.today_fee}}</div>
@@ -113,7 +113,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="24" :sm="12" :lg="6" class="card-panel-col">
+			<el-col v-if="user.type == 3" :xs="24" :sm="12" :lg="6" class="card-panel-col">
 				<div class="card-panel">
 					<div class="card-panel-description">
 						<div class="card-panel-num">{{data.info.yesterday_fee}}</div>
