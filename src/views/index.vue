@@ -57,9 +57,9 @@
 						<div class="card-panel-text">
 							余额
 						</div>
-<!--						<div class="card-panel-btn">-->
-<!--							<el-button type="primary" icon="el-icon-s-finance" size="medium" @click="goWithdraw">提现</el-button>-->
-<!--						</div>-->
+						<!--						<div class="card-panel-btn">-->
+						<!--							<el-button type="primary" icon="el-icon-s-finance" size="medium" @click="goWithdraw">提现</el-button>-->
+						<!--						</div>-->
 					</div>
 				</div>
 			</el-col>
@@ -103,6 +103,26 @@
 					</div>
 				</div>
 			</el-col>
+			<el-col :xs="24" :sm="12" :lg="6" class="card-panel-col">
+				<div class="card-panel">
+					<div class="card-panel-description">
+						<div class="card-panel-num">{{data.info.today_fee}}</div>
+						<div class="card-panel-text">
+							今日费用
+						</div>
+					</div>
+				</div>
+			</el-col>
+			<el-col :xs="24" :sm="12" :lg="6" class="card-panel-col">
+				<div class="card-panel">
+					<div class="card-panel-description">
+						<div class="card-panel-num">{{data.info.yesterday_fee}}</div>
+						<div class="card-panel-text">
+							昨日费用
+						</div>
+					</div>
+				</div>
+			</el-col>
 		</el-row>
 	</div>
 </template>
@@ -140,7 +160,7 @@ export default {
 					type: "warning",
 					closeOnClickModal: false,
 					closeOnPressEscape: false,
-				}).then(function() {
+				}).then(function () {
 					that.goRecharge()
 				}).catch(() => {
 
@@ -197,7 +217,7 @@ export default {
 		overflow: hidden;
 		color: #666;
 		background: #fff;
-		box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
+		box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
 		// border-color: rgba(0, 0, 0, .05);
 		border: 0;
 		border-radius: 5px;
@@ -229,7 +249,7 @@ export default {
 	}
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
 	.card-panel-description {
 		// display: none;
 

@@ -145,6 +145,11 @@
 					</span>
 				</template>
 			</el-table-column>
+			<el-table-column label="系统费用" :show-overflow-tooltip="true" width="150">
+				<template slot-scope="scope">
+					<span v-if="scope.row.status > 0" class="text-danger">{{ scope.row.total_fee }}</span><br>
+				</template>
+			</el-table-column>
 			<el-table-column label="备注" :show-overflow-tooltip="true" width="150">
 				<template slot-scope="scope">
 					<span>下单备注：{{ scope.row.remark }}</span><br>
