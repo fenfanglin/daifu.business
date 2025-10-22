@@ -79,6 +79,7 @@
 					今日交易总额：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">￥{{ info.today_success_amount }}</el-tag>
 					今日交易笔数：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.today_success_order }}单</el-tag>
 					今日成功率：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.today_success_rate }}%</el-tag>
+					今日费用：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.today_fee }}</el-tag>
 				</span>
 			</el-col>
 		</el-row>
