@@ -74,6 +74,8 @@
 					交易总额：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">￥{{ info.success_amount }}</el-tag>
 					交易笔数：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.success_order }}单</el-tag>
 					成功率：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.success_rate }}%</el-tag>
+					订单费用：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.success_fee }}</el-tag>
+
 				</span>
 				<span v-else>
 					今日交易总额：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">￥{{ info.today_success_amount }}</el-tag>
@@ -146,9 +148,10 @@
 					</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="系统费用" :show-overflow-tooltip="true" width="150">
+			<el-table-column label="费用" :show-overflow-tooltip="true" width="150">
 				<template slot-scope="scope">
-					<span v-if="scope.row.status > 0" class="text-danger">{{ scope.row.total_fee }}</span><br>
+					<span v-if="scope.row.status > 0">订单费用：<span class="text-danger">{{ parseFloat(scope.row.business_order_fee).toFixed(4) }}</span></span><br>
+					<span v-if="scope.row.status > 0">固定费用：<span class="text-danger">{{ parseFloat(scope.row.business_commission).toFixed(4) }}</span></span><br>
 				</template>
 			</el-table-column>
 			<el-table-column label="备注" :show-overflow-tooltip="true" width="150">
