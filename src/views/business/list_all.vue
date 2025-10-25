@@ -48,6 +48,7 @@
 			<el-table-column label="单笔控制" prop="amount_range" :show-overflow-tooltip="true" />
 			<el-table-column label="订单费率" prop="order_rate" :show-overflow-tooltip="true" />
 			<el-table-column label="固定费用" prop="commission" :show-overflow-tooltip="true" />
+			<el-table-column label="当天费用" prop="day_total_fee" :show-overflow-tooltip="true" />
 			<el-table-column label="余额" prop="allow_withdraw" :show-overflow-tooltip="true" />
 			<el-table-column label="更新时间" prop="update_time" min-width="120" />
 			<el-table-column label="状态" width="120">

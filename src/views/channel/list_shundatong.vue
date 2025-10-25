@@ -46,6 +46,21 @@
 			<el-col :span="1.5">
 				<el-button type="primary" icon="el-icon-plus" @click="handleAdd" v-hasPermi="['channel_shundatong:save:add']">新增</el-button>
 			</el-col>
+			<el-col :span="1.5">
+				<el-button type="primary" icon="el-icon-setting" @click="handleSetting" v-hasPermi="['channel_dingxintong:save:add']">通道设置</el-button>
+			</el-col>
+		</el-row>
+
+		<el-row class="mt10 mb20">
+			<el-col :span="1.5" class="total-info">
+				<span>
+					待处理订单数：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.order_wating }}单</el-tag>
+					正在处理订单数：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.order_doing }}单</el-tag>
+					<!-- 并发数量：<el-tag type="primary" size="small" effect="dark" class="bolder mr20">{{ info.order_num }}单</el-tag> -->
+
+				</span>
+
+			</el-col>
 		</el-row>
 
 		<!-- <el-row :gutter="10" class="mb20">
@@ -62,6 +77,7 @@
 			<el-table-column v-if="user.type == 1" label="工作室" prop="card_business_realname" :show-overflow-tooltip="true" width="150" key="1" />
 			<el-table-column label="商户ID" prop="mchid" :show-overflow-tooltip="true" width="180" />
 			<el-table-column label="APPID" prop="appid" :show-overflow-tooltip="true" width="180" />
+			<el-table-column label="并发数量" prop="order_num" :show-overflow-tooltip="true" width="180" />
 			<el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" />
 			<el-table-column label="状态" width="120">
 				<template slot-scope="scope">
@@ -117,6 +133,24 @@
 				<el-button @click="cancel">取消</el-button>
 			</div>
 		</el-dialog>
+		<el-dialog title="通道设置" :visible.sync="open3" width="600px" append-to-body :close-on-click-modal="false">
+			<el-form ref="form" :model="form3" :rules="rules" label-width="150px">
+				<el-row>
+					<el-form-item label="并发开关">
+						<el-switch v-model="form3.status" active-value="1" inactive-value="-1" :disabled="form3.blacklist_disabled"></el-switch>
+					</el-form-item>
+				</el-row>
+				<el-row>
+					<el-form-item label="设置并发限制时间">
+						<el-input-number v-model='form3.execute_time_limit' :min="1" :max="500" /> 秒
+					</el-form-item>
+				</el-row>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="submitSetting">确定</el-button>
+				<el-button @click="cancel">取消</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 
@@ -133,6 +167,7 @@ export default {
 			loading: true,
 			// 选中数组
 			ids: [],
+			info: [],
 			// 非单个禁用
 			single: true,
 			// 非多个禁用
@@ -158,7 +193,8 @@ export default {
 			},
 			// 表单参数
 			form: {},
-
+			form3: {},
+			open3: false,
 			optionCardBusiness: [],
 
 			auto_reload: {},
@@ -212,6 +248,38 @@ export default {
 		clearInterval(this.interval)
 	},
 	methods: {
+		handleSetting() {
+			let that = this
+
+			that.reset()
+			that.request({
+				url: 'user/channel_setting_view',
+				data: {
+					channel_id: that.channel_id
+				}
+			}).then(res => {
+				that.form3 = res.data
+				that.open3 = true
+			})
+		},
+		/* // 取消按钮
+		cancel() {
+			this.open3 = false
+			this.reset()
+		}, */
+		/** 提交按钮 */
+		submitSetting: function () {
+			let that = this
+			that.form3.channel_id = that.channel_id
+
+			that.request({
+				url: 'user/channel_setting_save',
+				data: that.form3
+			}).then(res => {
+				that.open3 = false
+				that.$modal.msgSuccess('更新成功')
+			})
+		},
 		async getUserInfo() {
 			this.user = await this.userInfo()
 		},
@@ -231,12 +299,14 @@ export default {
 			}).then(res => {
 				that.list = res.data.list
 				that.total = res.data.total
+				that.info = res.data.info
 				that.loading = false
 			})
 		},
 		// 取消按钮
 		cancel() {
 			this.open = false
+			this.open3 = false
 			this.reset()
 
 		},
