@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
 		<el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
-			<el-form-item v-if="user.type == 3" class="mr10">
+			<el-form-item v-if="user.type != 3" class="mr10">
 				<el-input v-model="queryParams.sub_business_id" placeholder="商户id" clearable />
 			</el-form-item>
 			<el-form-item class="mr10">
