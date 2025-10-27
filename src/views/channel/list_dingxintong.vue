@@ -46,9 +46,9 @@
 			<el-col :span="1.5">
 				<el-button type="primary" icon="el-icon-plus" @click="handleAdd" v-hasPermi="['channel_dingxintong:save:add']">新增</el-button>
 			</el-col>
-			<el-col :span="1.5">
+			<!-- <el-col :span="1.5">
 				<el-button type="primary" icon="el-icon-setting" @click="handleSetting" v-hasPermi="['channel_dingxintong:save:add']">通道设置</el-button>
-			</el-col>
+			</el-col> -->
 		</el-row>
 
 		<el-row class="mt10 mb20">
@@ -117,6 +117,9 @@
 					</el-form-item>
 					<el-form-item label="备注">
 						<el-input v-model="form.remark" maxlength="50" show-word-limit autocomplete="off" />
+					</el-form-item>
+					<el-form-item label="并发数量">
+						<el-input-number v-model="form.order_num" :controls="false" class="w210px text-left" />
 					</el-form-item>
 					<el-form-item label="状态">
 						<el-radio-group v-model="form.status">
